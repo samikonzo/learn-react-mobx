@@ -40,7 +40,7 @@ module.exports={
     overlay: true,
     contentBase: path.join(__dirname, './public'),
     clientLogLevel: 'error',
-    port: 8080,
+    //port: 8080,
     host: 'localhost'
   },
   plugins:[
