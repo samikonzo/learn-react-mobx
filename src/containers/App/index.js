@@ -12,9 +12,16 @@ export default class App extends React.Component<PropsType, StateType>{
 
   state = {}
 
+  componentDidMount(){
+    const { generateNewRandomArr } = appStore
+    setInterval(() => {
+      generateNewRandomArr()
+    }, 1000)
+  }
+
   render(): * {
 
-    const { show } = appStore
+    const { show, randomArr } = appStore
 
     return(
       <React.Fragment>
@@ -23,11 +30,18 @@ export default class App extends React.Component<PropsType, StateType>{
           visibility: show ? 'visible' : 'hidden',
           width: 300,
           height: 300,
-          lineHeight: '300px',
-          textAlign: 'center',
           outline: '1px dashed',
+          display: 'flex',
+          flexFlow:'row wrap',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}>
-        MENU
+          <div style={{
+            flex: '1 0 100%',
+            textAlign: 'center'
+          }}>MENU</div>
+          {randomArr.map( num => <span>{ num }</span> )}
+
         </div>
       </React.Fragment>
     )
