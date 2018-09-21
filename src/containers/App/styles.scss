@@ -1,0 +1,11 @@
+.square{
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+
+  transition: padding .5s, height .5s;
+
+  &-show{
+    padding: 40px 0px;
+  }
+}
