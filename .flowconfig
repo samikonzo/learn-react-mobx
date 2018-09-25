@@ -5,7 +5,15 @@
 [libs]
 
 [lints]
+unclear-type=warn
 
 [options]
+module.use_strict=true
+module.name_mapper.extension='scss' -> '<PROJECT_ROOT>/config/flow/cssModules.js'
+
+esproposal.decorators=ignore
+esproposal.class_static_fields=enable
+esproposal.class_instance_fields=enable
+
 
 [strict]

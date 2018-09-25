@@ -2,6 +2,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "webpack-dev-server --config ./webpack.config.js",
+    "lint:flow": "flow",
     "start": "start yarn run dev"
   },
   "dependencies": {

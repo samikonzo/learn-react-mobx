@@ -1,61 +1,56 @@
 // @flow
-import { observable, action, computed, autorun, when } from 'mobx'
-import { generate } from 'rxjs';
+import { observable, action, computed, autorun, when, toJS, configure, values } from "mobx"
 
+configure({ enforceActions: "observed" })
 
 class AppStore{
   @observable show = true
   @observable randomArr = []
-  @observable padding = ''
-  @observable style = {
-    @computed get padding(){return this.padding}
+  @observable padding = ""
+  @computed get style(){
+    return {
+      padding: this.padding
+    }
   }
 
-  isAvtorunRunned = false
-
+  @observable testArray = []
 
   constructor(){
-    autorun(when(
-      () => this.sum > 500,
-      () => console.log(' > 500!')
-    ))
+    autorun(() => {
+      console.log( values(this.randomArr) )
+    })
   }
 
 
 
   get sum(){
-    return this.randomArr.reduce( ( a, b ) => +a + +b , 0)
+    return this.randomArr.reduce( ( a, b ) => +a + +b, 0)
   }
 
-  @action toggleShow = () => {
-    console.log('toggleShow');
-
-    this.show = !this.show
+    @action.bound togglePadding() {
+    console.log("togglePadding")
+    this.padding = this.padding === "" ? "40px 49px" : ""
+    console.log("this.padding: ", this.padding)
   }
 
-  @action generateNewRandomArr = () => {
-    if(!this.isAvtorunRunned){
-      autorun(() => {console.log(this.randomArr.slice())})
-      this.isAvtorunRunned = true
-    }
+   @action generateNewRandomArr = () => {
+     const arr = []
 
-    const arr = []
+     for(var i = 0; i < 10; i++){
+       arr.push( this.generateRandomNum() )
+     }
 
-    for(var i = 0; i < 10; i++){
-      arr.push( this.generateRandomNum() )
-    }
-
-    this.randomArr = arr
-  }
+     this.randomArr = arr
+   }
 
   generateRandomNum = () => {
     return (Math.random() * 100).toFixed(0)
   }
 
-  setShow = (show) => {
+  setShow = (/* show: boolean */) => {
     //console.log('setShow : ', show)
-    this.padding = Math.random() > .5 ? '0px 49px' : ''
-    console.log('this.padding: ', this.padding);
+    this.padding = Math.random() > .5 ? "0px 49px" : ""
+    console.log("this.padding: ", this.padding)
   }
 
   getShow = () => this.show
