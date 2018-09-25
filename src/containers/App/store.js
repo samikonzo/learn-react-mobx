@@ -1,5 +1,5 @@
 // @flow
-import { observable, action } from 'mobx'
+import { observable, action, computed, autorun, when } from 'mobx'
 import { generate } from 'rxjs';
 
 
@@ -8,22 +8,37 @@ class AppStore{
   @observable randomArr = []
   @observable padding = ''
   @observable style = {
-    background: 'red',
-    get padding() {return this.padding},
+    @computed get padding(){return this.padding}
   }
+
+  isAvtorunRunned = false
+
+
+  constructor(){
+    autorun(when(
+      () => this.sum > 500,
+      () => console.log(' > 500!')
+    ))
+  }
+
+
 
   get sum(){
     return this.randomArr.reduce( ( a, b ) => +a + +b , 0)
   }
 
   @action toggleShow = () => {
-    this.padding = Math.random() > .5 ? '49px' : ''
-    console.log('this.padding: ', this.padding);
+    console.log('toggleShow');
 
     this.show = !this.show
   }
 
   @action generateNewRandomArr = () => {
+    if(!this.isAvtorunRunned){
+      autorun(() => {console.log(this.randomArr.slice())})
+      this.isAvtorunRunned = true
+    }
+
     const arr = []
 
     for(var i = 0; i < 10; i++){
@@ -38,7 +53,9 @@ class AppStore{
   }
 
   setShow = (show) => {
-    this.show = show
+    //console.log('setShow : ', show)
+    this.padding = Math.random() > .5 ? '0px 49px' : ''
+    console.log('this.padding: ', this.padding);
   }
 
   getShow = () => this.show

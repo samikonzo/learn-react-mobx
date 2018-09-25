@@ -1,48 +1,56 @@
 // @flow
-import * as React from 'react';
-import { observer } from 'mobx-react'
-import appStore from './store'
-import ST from './styles.scss'
+import * as React from "react";
+import { observer, } from "mobx-react";
+import appStore from "./store";
+import ST from "./styles.scss";
 
-const l = console.log
+const l = console.log;
 
 type PropsType = {}
 type StateType = {}
 
 @observer
-export default class App extends React.Component<PropsType, StateType>{
+class App extends React.Component<PropsType, StateType>{
 
-  state = {}
+  state = {
+      name: "",
+  }
 
   componentDidMount(){
-    const { generateNewRandomArr, setShow, getShow} = appStore
-    setInterval(() => {
-      generateNewRandomArr()
-    }, 1000)
+      const { generateNewRandomArr, setShow, getShow,} = appStore;
+      setInterval(() => {
+          generateNewRandomArr();
+      }, 1000);
 
-    setInterval(() => {
-      setShow(!getShow())
-    }, 2500)
+      setInterval(() => {
+      //setShow(!getShow())
+      }, 2500);
   }
 
   render(): React.Node {
 
-    const { show, randomArr, sum, style } = appStore
+      const { show, randomArr, sum, style, padding, } = appStore;
 
-    return(
-      <React.Fragment>
-        <button onClick={appStore.toggleShow}> toggleShow </button>
+      return(
+          <React.Fragment>
+              <button onClick={appStore.toggleShow}> toggleShow </button>
 
-        <div
-          className={`${ST.square} ${ show ? ST['square-show']: ''}`}
-          style={{...style}}
-        >
-          {randomArr.map( (num, ind) => <span key={ind}>{ num }</span> )}
-        </div>
+              <div
+                  className={`${ST.square} ${ show ? ST["square-show"]: ""}`}
+                  style={{
+                      ...style,
+                      padding: padding,
+                  }}
+              >
+                  {randomArr.map( (num, ind) => <span key={ind}>{ num } </span> )}
+              </div>
 
         Sum: <span>{sum}</span>
 
-      </React.Fragment>
-    )
+          </React.Fragment>
+      );
   }
 }
+
+
+export default App;
