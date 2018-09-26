@@ -17,7 +17,7 @@ class AppStore{
 
   constructor(){
     autorun(() => {
-      console.log( values(this.randomArr) )
+      //console.log( values(this.randomArr) )
     })
   }
 
@@ -56,5 +56,5 @@ class AppStore{
   getShow = () => this.show
 }
 
-
+export type AppStoreType = AppStore
 export default new AppStore()

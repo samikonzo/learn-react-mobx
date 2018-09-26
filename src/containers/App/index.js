@@ -1,74 +1,79 @@
 // @flow
 import * as React from "react"
+
+import { toJS } from "mobx"
 import { observer, Provider, inject } from "mobx-react"
 import appStore from "./store"
 import ST from "./styles.scss"
 
+import type { AppStoreType } from "./store"
+
 const l = console.log
 
 
+const arr = ['qwer', 'tewt', 'uert']
+const b = arr[2]
+
 
 type InsidePropsType={
-  num?: number
+  store?: AppStoreType
 }
 
-type InsideStateType={}
+type InsideStateType={
+  arr: number[]
+}
 
-@inject("num")
+@inject("store")
 class Inside extends React.Component<InsidePropsType, InsideStateType> {
-  state={}
+  state={
+    arr: []
+  }
 
-  render(): React.Node {
+  static getDerivedStateFromProps (props: InsidePropsType/* , state: InsideStateType  */){
+
+    const { store } = props
+    if( store ) return { arr : store.randomArr }
+
+    return null
+  }
+
+  render (): React.Node {
+
+    const arr = toJS(this.state.arr)
+    const first = arr.length ? arr[0] : "no number"
+
     return (
       <div>
         Inside element
         <br />
         num :
-        {this.props.num}
+        { first }
       </div>
     )
   }
 }
 
-type AppPropsType = {
-  randomArr: number[]
-}
+type AppPropsType = {}
 type AppStateType = {|
   arr: number[]
 |}
 
 
+
 @observer
 class App extends React.Component<AppPropsType, AppStateType>{
-  static getDerivedStateFromProps(props: AppPropsType, state: AppStateType){
-    console.log("gDSFP : ")
-    console.log("props: ", props)
-    console.log("state: ", state)
-  }
 
-  state = {
-    arr: []
-  }
 
-  componentDidMount(){
+  componentDidMount (){
     const { generateNewRandomArr } = appStore
     setInterval(() => {
       generateNewRandomArr()
     }, 1000)
   }
 
-  componentWillReceiveProps(nextProps: PropsType){
-    this.setState({
-      arr: nextProps.randomArr
-    })
-  }
+  render (): React.Node {
 
-
-  render(): React.Node {
-
-    const { show, randomArr, sum, style, padding } = appStore
-
-    const {arr} = this.state
+    const { show, /* sum, */ style, padding, randomArr: arr } = appStore
 
     return(
       <React.Fragment>
@@ -77,20 +82,18 @@ class App extends React.Component<AppPropsType, AppStateType>{
         </button>
 
         <div
-          className={`${ST.square} ${ show ? ST["square-show"]: ""}`}
+          className={`${ST.square} ${ show ? ST["square-show"] : ""}`}
           style={{
             ...style,
             padding: padding
           }}
         >
-          {arr.map( (num, ind) => (<span key={ind}>
-            { num }
-          </span>) )}
+          {arr.map( (num, ind) => ( <span key={ind}> { num } </span> ) ) }
         </div>
 
         Sum:
         <span>
-          {sum}
+          { arr.reduce( (a: number, b: string): number => +a + +b, 0 ) }
         </span>
 
         <br />
@@ -98,7 +101,7 @@ class App extends React.Component<AppPropsType, AppStateType>{
         <br />
         <br />
 
-        <Provider num={arr[0]}>
+        <Provider store={appStore} >
           <Inside />
         </Provider>
       </React.Fragment>

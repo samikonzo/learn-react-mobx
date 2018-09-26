@@ -34,9 +34,13 @@ module.exports = {
 
       /* custom rules */
 
-      // disable multispaces
-      'no-multi-spaces': 1,
+      'no-magic-numbers': ['error']
 
+      // spaces
+      'no-multi-spaces': 1,
+      'no-trailing-spaces': 1,
+      'space-before-function-paren': 1,
+      'space-infix-ops': 1,
       'indent': ["error", 2, { "VariableDeclarator": { "var": 2, "let": 2, "const": 3 } }],
 
       // react/jsx
